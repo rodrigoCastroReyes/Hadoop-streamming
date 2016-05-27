@@ -10,6 +10,7 @@ def get_hour_band(time_interval):
 
 saved_band_hour = None
 saved_time_interval = None
+saved_code = None
 count_call_out = 0
 
 for line in sys.stdin:
@@ -27,11 +28,12 @@ for line in sys.stdin:
 	else:
 		if saved_band_hour:
 			date = datetime.datetime.fromtimestamp(int(saved_time_interval)/1000).strftime('%Y-%m-%d/%H:%M:%S')
-			print '%s\t%s\t%d\t%.4f' % (code, date, saved_band_hour, count_call_out)
+			print '%s\t%s\t%d\t%.4f' % (saved_code, date, saved_band_hour, count_call_out)
 		saved_time_interval = time_interval
 		saved_band_hour = band_hour
 		count_call_out = call_out
+		saved_code = code
 
 #ultima iteracion
 if saved_band_hour == band_hour:
-	print '%s\t%s\t%d\t%.4f' % (code, date, saved_band_hour, count_call_out)
+	print '%s\t%s\t%d\t%.4f' % (saved_code, date, saved_band_hour, count_call_out)
