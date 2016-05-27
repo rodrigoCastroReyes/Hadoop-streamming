@@ -1,12 +1,14 @@
 #!/usr/bin/python2
 from operator import itemgetter
 import sys
+import datetime
 
 current_code = None
 current_call_out = 0
 word = None
 
 for line in sys.stdin:
+	print line
 	line = line.strip()
 	code, call_out = line.split('\t')
 	try: 
