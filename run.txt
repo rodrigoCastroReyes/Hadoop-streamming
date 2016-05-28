@@ -1,0 +1,1 @@
+ cat ./dataset_milan/sms-call-internet-tn-2013-12-01.txt | python mapper_hour_band.py | sort -nk1 -nk2 | python reducer_hour_band.py > resultados.csv
