@@ -1,0 +1,150 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>	
+	<title>Tarea Uno Analisis Exploratorio de Datos Espol</title>
+	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
+	<link rel="stylesheet" type="text/css" href="css/estilos.css">
+	<link rel="stylesheet" type="text/css" href="css/flex.css">
+</head>
+<body>
+	<div class="column-flex justify-content-center align-items-center">
+	  <h1 class="title" >Serie de Tiempo de los paises 0 (Gris) y Egipto (Rojo)</h1> 
+	  <canvas id="a" width="1000" height="600"></canvas>
+	  <br/>
+	  <h1 class="title">Serie de Tiempo d de los paises Italia (Verde)</h1>
+	  <canvas id="c" width="1000" height="600"></canvas>
+  	</div>
+  <!--div id="p"></div-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+  <script>
+   var allText;
+   var bandaHoraria = []; 
+   var callout = [];
+   var callout_second = [];
+   var callout_third = [];
+   var numeroLlamadas = [];
+   var paises, numeroLlamadas;
+	function readTextFile()
+	{
+    var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", "top3CountriesCallsSecondTest.txt", true);
+    rawFile.onreadystatechange = function ()
+    {
+        if(rawFile.readyState === 4)
+        {
+            allText = rawFile.responseText;
+			processFile(allText);
+			dibujar();
+		}
+    }
+
+    rawFile.send();
+	}
+	
+	function addBanda(valor){
+		for(j=0; j<bandaHoraria.length; j++){
+			if(bandaHoraria[j]==valor){
+				return;
+			}
+		}
+		bandaHoraria.push(valor);
+	}
+	
+	function processFile(allText1){
+		allText1 = allText1 + "";
+		var datos = allText1.split("\n");
+		var dato;
+		
+		for(i=0;i<datos.length;i++){
+			dato = datos[i].split(",");
+			addBanda(dato[1]);
+			if (dato[0] == 39){
+				callout.push(dato[2]);
+			}
+			if (dato[0] == 0){
+				callout_second.push(dato[2]);
+			}
+			if (dato[0] == 20){
+				callout_third.push(dato[2]);
+			}
+		}
+	}
+	readTextFile();
+	
+	function dibujar(){
+		var ctx = document.getElementById("c").getContext("2d");
+		var ctx1 = document.getElementById("a").getContext("2d");
+		
+		var options = { 
+			responsive: false,
+			mouseWheelZoomEnabled : true,
+			pointDotRadius: 10,
+			bezierCurve: false,
+			scaleShowVerticalLines: false,
+			scaleGridLineColor: 'black'
+		}
+	
+		var data = {
+			labels: bandaHoraria,
+			datasets: [{
+				label: "My First dataset",
+				fillColor: "rgba(0,255,0,0.2)",
+				strokeColor: "rgba(0,255,0,0.2)",
+				pointColor: "rgba(0,255,0,0.2)",
+				pointStrokeColor: "#fff",
+				pointHighlightFill: "#fff",
+				pointHighlightStroke: "rgba(0,255,0,0.2)",
+				data: callout
+			}, {
+				label: "My Second dataset",
+				fillColor: "rgba(220,220,220,0.2)",
+				strokeColor: "rgba(220,220,220,1)",
+				pointColor: "rgba(220,220,220,1)",
+				pointStrokeColor: "#fff",
+				pointHighlightFill: "#fff",
+				pointHighlightStroke: "rgba(220,220,220,1)",
+				data: callout_second
+			},{
+				label: "My Third dataset",
+				fillColor: "rgba(255,0,0,0.5)",
+				strokeColor: "rgba(255,0,0,0.5)",
+				pointColor: "rgba(255,0,0,0.5)",
+				pointStrokeColor: "red",
+				pointHighlightFill: "red",
+				pointHighlightStroke: "rgba(255,0,0,0)",
+				data: callout_third
+			}]
+		};
+		
+		var data1 = {
+			labels: bandaHoraria,
+			datasets: [{
+				label: "My First dataset",
+				fillColor: "rgba(220,220,220,0.2)",
+				strokeColor: "rgba(220,220,220,1)",
+				pointColor: "rgba(220,220,220,1)",
+				pointStrokeColor: "#fff",
+				pointHighlightFill: "#fff",
+				pointHighlightStroke: "rgba(220,220,220,1)",
+				data: callout_second
+			}, {
+				label: "My Second dataset",
+				fillColor: "rgba(255,0,0,0.2)",
+				strokeColor: "rgba(255,0,0,0.2)",
+				pointColor: "rgba(255,0,0,0.2)",
+				pointStrokeColor: "red",
+				pointHighlightFill: "red",
+				pointHighlightStroke: "rgba(255,0,0,0.2)",
+				data: callout_third
+			}]
+		};
+		
+		var MyNewCharta = new Chart(ctx1).Line(data1,options);
+		var MyNewChart = new Chart(ctx).Line(data,options);
+	}
+    
+  </script>
+</body>
+
+</html>
